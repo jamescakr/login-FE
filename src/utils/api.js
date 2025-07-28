@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: `${process.env.REACT_APP_BACKEND_URL}/api`,
   headers: {
     "Content-Type": "application/json",
-    authorization: "Bearer " + localStorage.getItem("token"),
+    authorization: "Bearer " + sessionStorage.getItem("token"),
   },
 });
 /**
@@ -27,7 +27,7 @@ api.interceptors.response.use(
   },
   function (error) {
     error = error.response.data;
-    console.log("RESPONSE ERROR", error);
+    console.log("response ERROR", error);
     return Promise.reject(error);
   }
 );
