@@ -14,18 +14,26 @@ const RegisterPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError("");
+
+    if (password !== secPassword) {
+      setError("비밀번호가 일치하지 않습니다");
+      return;
+    }
+
     try {
-      if (password !== secPassword) {
-        throw new Error("password does not match");
+      const { status, data } = await api.post("/user", {
+        name,
+        email,
+        password,
+      });
+
+      if (status === 200) {
+        return navigate("/login");
       }
-      const response = await api.post("/user", { name, email, password });
-      if (response.status === 200) {
-        navigate("/login");
-      } else {
-        throw new Error(response.data.error);
-      }
-    } catch (error) {
-      setError(error.message);
+      setError(data.message || "회원가입에 실패했습니다");
+    } catch (err) {
+      setError(err.message || "회원가입에 실패했습니다");
     }
   };
 
@@ -37,8 +45,10 @@ const RegisterPage = () => {
         <Form.Group className="mb-3" controlId="formName">
           <Form.Label>Name</Form.Label>
           <Form.Control
-            type="string"
+            type="text"
             placeholder="Name"
+            value={name}
+            required
             onChange={(event) => setName(event.target.value)}
           />
         </Form.Group>
@@ -48,6 +58,8 @@ const RegisterPage = () => {
           <Form.Control
             type="email"
             placeholder="Enter email"
+            value={email}
+            required
             onChange={(event) => setEmail(event.target.value)}
           />
         </Form.Group>
@@ -57,6 +69,8 @@ const RegisterPage = () => {
           <Form.Control
             type="password"
             placeholder="Password"
+            value={password}
+            required
             onChange={(event) => setPassword(event.target.value)}
           />
         </Form.Group>
@@ -66,6 +80,8 @@ const RegisterPage = () => {
           <Form.Control
             type="password"
             placeholder="re-enter the password"
+            value={secPassword}
+            required
             onChange={(event) => setSecPassword(event.target.value)}
           />
         </Form.Group>
