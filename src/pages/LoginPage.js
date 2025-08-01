@@ -13,6 +13,14 @@ const LoginPage = ({ user, setUser }) => {
 
   const handleLogin = async (event) => {
     event.preventDefault();
+
+    if (!email.trim()) {
+      return setError("이메일을 입력해주세요");
+    }
+    if (!password.trim()) {
+      return setError("비밀번호를 입력해주세요");
+    }
+
     try {
       const response = await api.post("/user/login", { email, password });
       console.log("Rrrresponse", response);
@@ -30,8 +38,8 @@ const LoginPage = ({ user, setUser }) => {
     }
   };
 
-  if(user) {
-    return <Navigate to = "/" />
+  if (user) {
+    return <Navigate to="/" />;
   }
 
   return (
