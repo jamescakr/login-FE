@@ -17,10 +17,10 @@ function App() {
       if (storedToken) {
         const response = await api.get("/user/me");
         console.log("RRR", response);
-        setUser(response.data.user)
-      } 
+        setUser(response.data.user);
+      }
     } catch (error) {
-      setUser(null)
+      setUser(null);
     }
   };
 
